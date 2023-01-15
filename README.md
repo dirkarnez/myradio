@@ -9,6 +9,7 @@ myradio
 - http://www.portaudio.com/docs/v19-doxydocs/open_default_stream.html
 
 ### Reference
+- https://github.com/ABroadcasting/streamingplayer
 - https://github.com/ABroadcasting/streamtranscoder/blob/2be06bbff686465c0523f746ba272f35af71cdb2/liboddcast.cpp
 - https://github.com/maroonpu/FindAlexa/blob/411c9d5a7931facf26ca17d982c06d2f5c09dcc2/src/alexa.cpp
 - https://github.com/ainouna/neutrino2/blob/e40731a5b7606ee5901ccc732cf0e35a1962a422/plugins/icecast/icecast.cpp
