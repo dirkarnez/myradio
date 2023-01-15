@@ -11,6 +11,10 @@ myradio
 ### Reference
 - https://github.com/ABroadcasting/streamtranscoder/blob/2be06bbff686465c0523f746ba272f35af71cdb2/liboddcast.cpp
 - https://github.com/maroonpu/FindAlexa/blob/411c9d5a7931facf26ca17d982c06d2f5c09dcc2/src/alexa.cpp
+- https://github.com/ainouna/neutrino2/blob/e40731a5b7606ee5901ccc732cf0e35a1962a422/plugins/icecast/icecast.cpp
+- https://learn.microsoft.com/en-us/windows/win32/api/mmeapi/ns-mmeapi-wavehdr
+- https://stackoverflow.com/questions/61326170/im-trying-to-open-a-stream-in-portaudio
+- https://github.com/PortAudio/portaudio/tree/master/examples
 - ```cpp
   void CIceCast::processPlaylistUrl(const char *url, const char *name, const time_t tim) 
   {
