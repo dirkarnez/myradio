@@ -29,9 +29,7 @@ set_target_properties(PortAudioCpp PROPERTIES
 
 set_property( TARGET PortAudioCpp APPEND PROPERTY INTERFACE_LINK_LIBRARIES portaudio_static)
 
-
 target_include_directories(PortAudioCpp INTERFACE "${PortAudioCpp_DIR}/include")
-
 
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 

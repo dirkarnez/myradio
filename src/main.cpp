@@ -14,21 +14,29 @@ struct MemoryStruct
   size_t size;
 };
 
-static size_t write_cb(char *data, size_t n, size_t l, void *userp)
+static size_t write_cb(char *data, size_t size, size_t nmemb, void *userp)
 {
   std::cout << "write_cb" << std::endl;
-  /* take care of the data here, ignored in this example */
-  (void)data;
-  (void)userp;
-  // sendToMP3Decoder(pStreamData, chunkSize)
-  return n * l;
+  size_t realsize = size * nmemb;
+  struct MemoryStruct *mem = (struct MemoryStruct *)userp;
+
+  char *ptr = (char *)realloc(mem->memory, mem->size + realsize + 1);
+  if (ptr == NULL) {
+    return 0; /* out of memory! */
+  }
+  
+  mem->memory = ptr;
+  memcpy(&(mem->memory[mem->size]), data, realsize);
+  mem->size += realsize;
+  mem->memory[mem->size] = 0;
+
+  return realsize;
 }
 
 int main(void)
 {
   CURL *curl_handle;
   struct MemoryStruct chunk;
-
   chunk.memory = NULL; // we expect realloc(NULL, size) to work
   chunk.size = 0;      // no data at this point
 
