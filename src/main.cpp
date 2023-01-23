@@ -14,9 +14,55 @@ struct MemoryStruct
   size_t size;
 };
 
+class Collector
+{
+public:
+  struct MemoryStruct chunk;
+
+  Collector()
+  {
+    this->chunk.memory = NULL; // we expect realloc(NULL, size) to work
+    this->chunk.size = 0;      // no data at this point
+  }
+
+  ~Collector()
+  {
+    if (chunk.memory)
+    {
+      free(chunk.memory);
+    }
+  }
+  int get(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
+          const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags)
+  {
+    assert(outputBuffer != NULL);
+
+    std::cout << "hahha" << std::endl;
+
+    float **out = static_cast<float **>(outputBuffer);
+
+    for (unsigned int i = 0; i < framesPerBuffer; ++i)
+    {
+      // out[0][i] = table_[leftPhase_];
+      // out[1][i] = table_[rightPhase_];
+
+      // leftPhase_ += 1;
+      // if (leftPhase_ >= tableSize_)
+      //     leftPhase_ -= tableSize_;
+
+      // rightPhase_ += 3;
+      // if (rightPhase_ >= tableSize_)
+      //     rightPhase_ -= tableSize_;
+    }
+
+    return paContinue;
+  }
+};
+
+Collector collector;
+
 static size_t write_cb(char *data, size_t size, size_t nmemb, void *userp)
 {
-  std::cout << "write_cb" << std::endl;
   size_t realsize = size * nmemb;
   struct MemoryStruct *mem = (struct MemoryStruct *)userp;
 
@@ -44,34 +90,19 @@ int main(void)
 
   // Set up the parameters required to open a (Callback)Stream:
   portaudio::DirectionSpecificStreamParameters outParams(sys.defaultOutputDevice(), 2, portaudio::FLOAT32, false, sys.defaultOutputDevice().defaultLowOutputLatency(), NULL);
-  portaudio::StreamParameters params(portaudio::DirectionSpecificStreamParameters::null(), outParams, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff);
+  portaudio::StreamParameters params(portaudio::DirectionSpecificStreamParameters::null(), outParams, 44100, 64, paClipOff);
 
   std::cout << "Opening stereo output stream..." << std::endl;
 
   // Create (and open) a new Stream, using the SineGenerator::generate function as a callback:
-  portaudio::FunCallbackStream stream(params, [&](const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags) {
-     assert(outputBuffer != NULL);
+  portaudio::MemFunCallbackStream<Collector> stream(params, collector, &Collector::get);
 
-        float **out = static_cast<float **>(outputBuffer);
-
-        for (unsigned int i = 0; i < framesPerBuffer; ++i)
-        {
-            out[0][i] = table_[leftPhase_];
-            out[1][i] = table_[rightPhase_];
-        }
-        
-        return paContinue;
-  }, NULL);
-
-  std::cout << "Starting playback for " << NUM_SECONDS << " seconds." << std::endl;
+  //  std::cout << "Starting playback for " << NUM_SECONDS << " seconds." << std::endl;
 
   // Start the Stream (audio playback starts):
   stream.start();
 
   CURL *curl_handle;
-  struct MemoryStruct chunk;
-  chunk.memory = NULL; // we expect realloc(NULL, size) to work
-  chunk.size = 0;      // no data at this point
 
   curl_global_init(CURL_GLOBAL_ALL);
 
@@ -85,7 +116,7 @@ int main(void)
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_cb);
 
   // we pass our 'chunk' struct to the callback function
-  curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+  curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&collector.chunk);
 
   // some servers don't like requests that are made without a user-agent field, so we provide one
   curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
@@ -150,11 +181,6 @@ int main(void)
       //   }
       // }
     }
-  }
-
-  if (chunk.memory)
-  {
-    free(chunk.memory);
   }
 
   // we're done with libcurl, so clean it up
