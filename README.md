@@ -9,6 +9,7 @@ myradio
 - http://www.portaudio.com/docs/v19-doxydocs/open_default_stream.html
 
 ### Reference
+- **https://github.com/softcat477/Juicy-Radio/blob/6bbef01f64a2f17cad5cb57d2463ac64ef2f78f4/src/ThreadInternet.cpp**
 - https://github.com/ABroadcasting/streamingplayer
 - https://github.com/ABroadcasting/streamtranscoder/blob/2be06bbff686465c0523f746ba272f35af71cdb2/liboddcast.cpp
 - https://github.com/maroonpu/FindAlexa/blob/411c9d5a7931facf26ca17d982c06d2f5c09dcc2/src/alexa.cpp
