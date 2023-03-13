@@ -9,6 +9,8 @@ myradio
 - http://www.portaudio.com/docs/v19-doxydocs/open_default_stream.html
 
 ### Reference
+- **[waihungmm/pi_radio: Raspberry Pi Internet Ratio](https://github.com/waihungmm/pi_radio)**
+  - Exactly
 - **https://github.com/softcat477/Juicy-Radio/blob/6bbef01f64a2f17cad5cb57d2463ac64ef2f78f4/src/ThreadInternet.cpp**
 - **https://github.com/otgaard/zapAudio**
 - https://github.com/ABroadcasting/streamingplayer
